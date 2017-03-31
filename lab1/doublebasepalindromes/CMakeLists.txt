@@ -3,7 +3,7 @@ project(doublebasepalindromes)
 set(HEDEAR_FILES DoubleBasePalindromes.h)
 set(SOURCE_FILES DoubleBasePalindromes.cpp)
 
-link_libraries(libpalindrome)
+link_libraries(libpalindrome libreversestring)
 add_library(libdoublebasepalindromes STATIC ${SOURCE_FILES})
 target_include_directories(libdoublebasepalindromes PUBLIC .)
 
