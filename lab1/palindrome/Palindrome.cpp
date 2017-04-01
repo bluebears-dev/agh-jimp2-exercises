@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-bool is_palindrome(std::string str) {
+bool IsPalindrome(std::string str) {
     auto left = str.begin() - 1,
          right = str.end();
 

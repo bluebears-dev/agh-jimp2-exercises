@@ -6,6 +6,6 @@
 #include <DoubleBasePalindromes.h>
 
 int main() {
-    std::cout << to_binary(5);
+    std::cout << ToBinary(5);
     return 0;
 }

@@ -11,7 +11,7 @@
 #include <Palindrome.h>
 #include <ReverseString.h>
 
-std::string to_binary(int number);
+std::string ToBinary(int number);
 uint64_t DoubleBasePalindromes(int max_value_exclusive);
 
 #endif //JIMP_EXERCISES_DOUBLEPALINDROME_H

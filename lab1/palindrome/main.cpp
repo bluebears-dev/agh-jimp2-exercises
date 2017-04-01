@@ -8,6 +8,6 @@
 using namespace std;
 
 int main() {
-    cout << is_palindrome("12344321");
+    cout << IsPalindrome("12344321");
     return 0;
 }

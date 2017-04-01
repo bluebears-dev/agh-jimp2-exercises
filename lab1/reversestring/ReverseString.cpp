@@ -6,7 +6,7 @@
 
 using namespace std;
 
-string reverse(string str) {
+string Reverse(string str) {
     string reversed("");
     for (auto i = str.end() - 1; i >= str.begin(); --i)
         reversed += *i;
