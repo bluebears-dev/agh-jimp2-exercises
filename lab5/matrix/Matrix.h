@@ -17,8 +17,17 @@ namespace algebra {
     class Matrix {
         std::complex<double> **array;
         size_t height, width;
-        void fill(const std::complex<double> &value);
+
+        void Create();
+        void Copy(const Matrix &matrix);
+
+        void Fill(const std::complex<double> &value);
         void MakeUnitary();
+
+
+        void SanitizeString(std::string &str);
+        std::vector<std::string> Cut(std::string str, const char chr);
+        std::complex<double> ToComplex(const std::string &str);
     public:
         Matrix();
         ~Matrix();
