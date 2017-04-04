@@ -17,9 +17,10 @@ namespace pool {
         std::set<std::experimental::string_view> pool;
     public:
         TextPool() = default;
+        ~TextPool() = default;
+
         TextPool(std::experimental::string_view &str);
         TextPool(const std::initializer_list<std::experimental::string_view> &elements);
-        ~TextPool();
 
         TextPool(const TextPool &text_pool) = delete;
         TextPool& operator=(const TextPool &text_pool) = delete;
