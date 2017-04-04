@@ -10,40 +10,40 @@ using namespace algebra;
 using namespace std;
 
 void Matrix::Create() {
-    if (height and width) {
-        array = new complex<double>*[height];
-        for (auto i = 0; i < height; ++i)
-            array[i] = new complex<double>[width];
+    if (height_ and width_) {
+        array_ = new complex<double>*[height_];
+        for (auto i = 0; i < height_; ++i)
+            array_[i] = new complex<double>[width_];
     }
 }
 
 void Matrix::Copy(const Matrix &matrix) {
-    if (height and width) {
-        array = new complex<double>*[height];
-        for (auto i = 0; i < height; ++i) {
-            array[i] = new complex<double>[width];
-            for (auto j = 0; j < width; ++j)
-                array[i][j] = matrix.array[i][j];
+    if (height_ and width_) {
+        array_ = new complex<double>*[height_];
+        for (auto i = 0; i < height_; ++i) {
+            array_[i] = new complex<double>[width_];
+            for (auto j = 0; j < width_; ++j)
+                array_[i][j] = matrix.array_[i][j];
         }
     }
 }
 
 void Matrix::Fill(const complex<double> &value) {
-    if (height and width) {
-        for (auto i = 0; i < height; ++i)
-            for (auto j = 0; j < width; ++j)
-                array[i][j] = value;
+    if (height_ and width_) {
+        for (auto i = 0; i < height_; ++i)
+            for (auto j = 0; j < width_; ++j)
+                array_[i][j] = value;
     }
 }
 
 void Matrix::MakeUnitary() {
-    if (height and width) {
-        for (auto i = 0; i < height; ++i)
-            for (auto j = 0; j < width; ++j)
+    if (height_ and width_ and height_ == width_) {
+        for (auto i = 0; i < height_; ++i)
+            for (auto j = 0; j < width_; ++j)
                 if (i == j)
-                    array[i][j] = 1;
+                    array_[i][j] = 1;
                 else
-                    array[i][j] = 0;
+                    array_[i][j] = 0;
     }
 }
 
@@ -55,8 +55,18 @@ void Matrix::SanitizeString(std::string &str) {
 std::complex<double> Matrix::ToComplex(const std::string &str) {
     size_t pos = str.find('i');
     double r, im;
-    r = stod(str.substr(0, pos));
-    im = stod(str.substr(pos + 1, str.length()));
+    string tmp = str.substr(0, pos);
+    if (tmp.empty())
+        r = 0.0;
+    else
+        r = stod(tmp);
+
+    tmp = str.substr(pos + 1, str.length());
+    if (tmp.empty())
+        im = 0.0;
+    else
+        im = stod(tmp);
+
     return {r, im};
 }
 
@@ -73,20 +83,20 @@ std::vector<std::string> Matrix::Cut(std::string str, const char chr) {
     return output;
 }
 
-Matrix::Matrix() : height(0), width(0), array(nullptr) {}
+Matrix::Matrix() : height_(0), width_(0), array_(nullptr) {}
 
 Matrix::~Matrix() {
-    if (height and width) {
-        for (auto i = 0; i < height; ++i)
-            delete[] array[i];
-        delete[] array;
+    if (height_ and width_) {
+        for (auto i = 0; i < height_; ++i)
+            delete[] array_[i];
+        delete[] array_;
     }
-    array = nullptr;
-    height = 0;
-    width = 0;
+    array_ = nullptr;
+    height_ = 0;
+    width_ = 0;
 }
 
-Matrix::Matrix(size_t height, size_t width) : height(height), width(width), array(nullptr) {
+Matrix::Matrix(size_t height, size_t width) : height_(height), width_(width), array_(nullptr) {
     Create();
     Fill(complex<double>(0.0, 0.0));
 }
@@ -96,16 +106,16 @@ Matrix::Matrix(const string &str_matrix) {
     SanitizeString(str);
     auto rows = Cut(str, ';');
 
-    height = rows.size();
-    array = new complex<double>*[height];
-    if (height) {
+    height_ = rows.size();
+    array_ = new complex<double>*[height_];
+    if (height_) {
         vector<size_t> widths;
         for (auto i = 0; i < rows.size(); ++i) {
             auto cols = Cut(rows[i], ',');
-            array[i] = new complex<double>[cols.size()];
+            array_[i] = new complex<double>[cols.size()];
             widths.push_back(cols.size());
             for (auto j = 0; j < cols.size(); ++j)
-                array[i][j] = ToComplex(cols[j]);
+                array_[i][j] = ToComplex(cols[j]);
         }
         size_t prev = widths[0];
         for (auto width : widths) {
@@ -115,21 +125,21 @@ Matrix::Matrix(const string &str_matrix) {
             }
             prev = width;
         }
-        width = widths[0];
+        width_ = widths[0];
     }
 }
 
 Matrix::Matrix(const initializer_list<vector<complex<double>>> &elements) :
-        height(elements.size()), width((*elements.begin()).size()) {
-    if (height and width) {
-        array = new complex<double>*;
+        height_(elements.size()), width_((*elements.begin()).size()) {
+    if (height_ and width_) {
+        array_ = new complex<double>*;
         vector<size_t> widths;
-        for (auto i = 0; i < height; ++i) {
-            array[i] = new complex<double>[width];
+        for (auto i = 0; i < height_; ++i) {
+            array_[i] = new complex<double>[width_];
             auto vec = *(elements.begin() + i);
             widths.push_back(vec.size());
             for (auto j = 0; j < vec.size(); ++j)
-                array[i][j] = vec[j];
+                array_[i][j] = vec[j];
         }
         size_t prev = widths[0];
         for (auto width : widths) {
@@ -139,13 +149,13 @@ Matrix::Matrix(const initializer_list<vector<complex<double>>> &elements) :
             }
             prev = width;
         }
-        width = widths[0];
+        width_ = widths[0];
     }
 }
 
 Matrix::Matrix(const Matrix &matrix) {
-    height = matrix.height;
-    width = matrix.width;
+    height_ = matrix.height_;
+    width_ = matrix.width_;
 
     Copy(matrix);
 }
@@ -153,8 +163,8 @@ Matrix::Matrix(const Matrix &matrix) {
 Matrix &Matrix::operator=(const Matrix &matrix) {
     if (this != &matrix) {
         this->~Matrix();
-        height = matrix.height;
-        width = matrix.width;
+        height_ = matrix.height_;
+        width_ = matrix.width_;
 
         Copy(matrix);
     }
@@ -162,44 +172,44 @@ Matrix &Matrix::operator=(const Matrix &matrix) {
 }
 
 Matrix::Matrix(Matrix &&matrix) {
-    height = matrix.height;
-    width = matrix.width;
-    array = matrix.array;
+    height_ = matrix.height_;
+    width_ = matrix.width_;
+    array_ = matrix.array_;
 
-    matrix.array = nullptr;
-    matrix.height = 0;
-    matrix.width = 0;
+    matrix.array_ = nullptr;
+    matrix.height_ = 0;
+    matrix.width_ = 0;
 }
 
 Matrix &Matrix::operator=(Matrix &&matrix) {
     if (this != &matrix) {
         this->~Matrix();
-        height = matrix.height;
-        width = matrix.width;
-        array = matrix.array;
+        height_ = matrix.height_;
+        width_ = matrix.width_;
+        array_ = matrix.array_;
 
-        matrix.array = nullptr;
-        matrix.height = 0;
-        matrix.width = 0;
+        matrix.array_ = nullptr;
+        matrix.height_ = 0;
+        matrix.width_ = 0;
     }
     return *this;
 }
 
 std::pair<size_t, size_t> Matrix::Size() const {
-    return pair<size_t, size_t>(height, width);
+    return pair<size_t, size_t>(height_, width_);
 }
 
 string Matrix::Print() const {
     stringstream str_stream;
 
     str_stream << '[';
-    for (auto i = 0; i < height; ++i) {
-        for (auto j = 0; j < width; ++j) {
-            str_stream << array[i][j].real() << 'i' << array[i][j].imag();
-            if (j != width - 1)
+    for (auto i = 0; i < height_; ++i) {
+        for (auto j = 0; j < width_; ++j) {
+            str_stream << array_[i][j].real() << 'i' << array_[i][j].imag();
+            if (j != width_ - 1)
                 str_stream << ", ";
         }
-        if (i != height - 1)
+        if (i != height_ - 1)
             str_stream << "; ";
     }
     str_stream << ']';
@@ -207,40 +217,40 @@ string Matrix::Print() const {
 }
 
 Matrix Matrix::Add(const Matrix &matrix) const {
-    Matrix m(height, width);
+    Matrix m(height_, width_);
 
-    if (height != matrix.height or width != matrix.width)
+    if (height_ != matrix.height_ or width_ != matrix.width_)
         return Matrix();
 
-    for (auto i = 0; i < height; ++i)
-        for (auto j = 0; j < height; ++j)
-            m.array[i][j] = Matrix::array[i][j] + matrix.array[i][j];
+    for (auto i = 0; i < height_; ++i)
+        for (auto j = 0; j < height_; ++j)
+            m.array_[i][j] = Matrix::array_[i][j] + matrix.array_[i][j];
     return m;
 }
 
 Matrix Matrix::Sub(const Matrix &matrix) const {
-    Matrix m(height, width);
+    Matrix m(height_, width_);
 
-    if (height != matrix.height or width != matrix.width)
+    if (height_ != matrix.height_ or width_ != matrix.width_)
         return Matrix();
 
-    for (auto i = 0; i < height; ++i)
-        for (auto j = 0; j < height; ++j)
-            m.array[i][j] = Matrix::array[i][j] - matrix.array[i][j];
+    for (auto i = 0; i < height_; ++i)
+        for (auto j = 0; j < height_; ++j)
+            m.array_[i][j] = Matrix::array_[i][j] - matrix.array_[i][j];
     return m;
 }
 
 Matrix Matrix::Mul(const Matrix &matrix) const {
-    Matrix m(height, matrix.width);
+    Matrix m(height_, matrix.width_);
 
-    if (height != matrix.width or width != matrix.height)
+    if (height_ != matrix.width_ or width_ != matrix.height_)
         return Matrix();
 
-    for (auto i = 0; i < height; ++i)
-        for (auto j = 0; j < matrix.width; ++j) {
-            m.array[i][j] = 0;
-            for (auto k = 0; k < width; ++k)
-                m.array[i][j] += Matrix::array[i][k] * matrix.array[k][j];
+    for (auto i = 0; i < height_; ++i)
+        for (auto j = 0; j < matrix.width_; ++j) {
+            m.array_[i][j] = 0;
+            for (auto k = 0; k < width_; ++k)
+                m.array_[i][j] += Matrix::array_[i][k] * matrix.array_[k][j];
         }
     return m;
 }
@@ -248,10 +258,10 @@ Matrix Matrix::Mul(const Matrix &matrix) const {
 Matrix Matrix::Mul(const std::complex<double> number) const {
     Matrix m(*this);
 
-    for (auto i = 0; i < height; ++i)
-        for (auto j = 0; j < width; ++j) {
-            for (auto k = 0; k < width; ++k)
-                m.array[i][j] *= number;
+    for (auto i = 0; i < height_; ++i)
+        for (auto j = 0; j < width_; ++j) {
+            for (auto k = 0; k < width_; ++k)
+                m.array_[i][j] *= number;
         }
     return m;
 }
@@ -259,23 +269,23 @@ Matrix Matrix::Mul(const std::complex<double> number) const {
 Matrix Matrix::Div(const std::complex<double> number) const {
     Matrix m(*this);
 
-    for (auto i = 0; i < height; ++i)
-        for (auto j = 0; j < width; ++j) {
-            for (auto k = 0; k < width; ++k)
-                m.array[i][j] /= number;
+    for (auto i = 0; i < height_; ++i)
+        for (auto j = 0; j < width_; ++j) {
+            for (auto k = 0; k < width_; ++k)
+                m.array_[i][j] /= number;
         }
     return m;
 }
 
 Matrix Matrix::Pow(int exponent) const {
-    if (!height or !width)
+    if (!height_ or !width_)
         return Matrix();
-    if (height != width)
+    if (height_ != width_)
         return Matrix();
 
     if (exponent == 1)
         return *this;
-    Matrix pow(height, width);
+    Matrix pow(height_, width_);
     pow.MakeUnitary();
 
     for (auto i = 0; i < exponent; ++i)
