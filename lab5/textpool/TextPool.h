@@ -14,7 +14,7 @@
 namespace pool {
 
     class TextPool {
-        std::set<std::experimental::string_view> pool;
+        std::set<std::experimental::string_view> pool_;
     public:
         TextPool() = default;
         ~TextPool() = default;

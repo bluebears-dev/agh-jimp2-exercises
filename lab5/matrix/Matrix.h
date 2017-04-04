@@ -15,8 +15,8 @@
 
 namespace algebra {
     class Matrix {
-        std::complex<double> **array;
-        size_t height, width;
+        std::complex<double> **array_;
+        size_t height_, width_;
 
         void Create();
         void Copy(const Matrix &matrix);
