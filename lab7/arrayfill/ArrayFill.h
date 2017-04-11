@@ -14,6 +14,8 @@ namespace arrays {
 
     class ArrayFill {
     public:
+        virtual ~ArrayFill() = default;
+
         virtual int Value(int index) const = 0;
     };
 
