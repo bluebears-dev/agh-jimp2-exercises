@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <initializer_list>
+#include <vector>
 
 namespace academia {
 
@@ -47,8 +48,14 @@ namespace academia {
     };
 
     class StudentRepository {
+        std::vector<Student> repository_;
     public:
-        size_t StudentCount();
+        StudentRepository() = default;
+        StudentRepository(const std::initializer_list<Student> &elements);
+
+        Student &operator[](std::string id);
+        bool operator==(const StudentRepository &student_repository) const;
+        size_t StudentCount() const;
     };
 
     std::ostream &operator<<(std::ostream &stream, const StudyYear& study_year);
