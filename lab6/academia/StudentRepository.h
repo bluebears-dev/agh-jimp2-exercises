@@ -50,7 +50,7 @@ namespace academia {
     class StudentRepository {
         std::vector<Student> repository_;
     public:
-        StudentRepository();
+        StudentRepository() = default;
         StudentRepository(const std::initializer_list<Student> &elements);
 
         Student &operator[](std::string id);

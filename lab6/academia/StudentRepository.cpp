@@ -85,14 +85,8 @@ namespace academia {
                 year_ == student.year_);
     }
 
-    StudentRepository::StudentRepository() {
-        // sentinel node
-        repository_.push_back(Student{"-1", 0, 0, 0, 0});
-    }
-
     StudentRepository::StudentRepository(const initializer_list<Student> &elements) {
         this->repository_ = elements;
-        repository_.push_back(Student{"-1", 0, 0, 0, 0});
     }
 
     Student &StudentRepository::operator[](string id) {
