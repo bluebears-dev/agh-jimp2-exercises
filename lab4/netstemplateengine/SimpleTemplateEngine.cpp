@@ -18,14 +18,14 @@ namespace nets {
         string replaced(template_);
         // find out which placeholders will be changed
         for (const auto &pair : model)
-            replaced = regex_replace(replaced, {"\\{\\{" + pair.first + "\\}\\}"}, "{%{" + pair.first + "}%}");
+            replaced = regex_replace(replaced, regex{"\\{\\{" + pair.first + "\\}\\}"}, "{%{" + pair.first + "}%}");
 
         // clear out other placeholders
-        replaced = regex_replace(replaced, {"\\{\\{[^{}]*\\}\\}"}, "");
+        replaced = regex_replace(replaced, regex{"\\{\\{[^{}]*\\}\\}"}, "");
 
         // replace content
         for (const auto &pair : model)
-            replaced = regex_replace(replaced, {"\\{%\\{" + pair.first + "\\}%\\}"}, pair.second);
+            replaced = regex_replace(replaced, regex{"\\{%\\{" + pair.first + "\\}%\\}"}, pair.second);
         return replaced;
     }
 }
