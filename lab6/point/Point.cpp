@@ -1,11 +1,12 @@
 //Definicja w Point.cpp
 #include "Point.h"
-#include <iomanip>
 
 using std::istream;
 using std::runtime_error;
 using std::ostream;
 using std::ws;
+using std::cout;
+using std::endl;
 
 //Helper functions:
 void CheckNextChar(char c, istream* is) {
@@ -52,4 +53,24 @@ istream& operator>>(istream & input, Point& p){
 ostream &operator<<(ostream &os, Point &point) {
     os << "(" << point.x_ << ", " << point.y_ << ")";
     return os;
+}
+
+Point::Point(double x, double y) : x_(x), y_(y) {
+    cout << "Point ctor" << endl;
+}
+
+Point::~Point() {
+    cout << "Point dtor" << endl;
+}
+
+double Point::Distance(const Point &other) const{
+    return sqrt(pow(GetX()-other.GetX(),2)+pow(GetY()-other.GetY(),2));
+}
+
+double Point::GetX() const {
+    return x_;
+}
+
+double Point::GetY() const {
+    return y_;
 }
