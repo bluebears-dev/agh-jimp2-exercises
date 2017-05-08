@@ -35,11 +35,19 @@ namespace moviesubs {
         InvalidSubtitleLineFormat(std::string msg, int line);
     };
 
+    class MissingTimeSpecification : public SubtitlesValidationException {
+    public:
+        MissingTimeSpecification(std::string msg, int line);
+    };
+
+    class OutOfOrderFrames : public SubtitlesValidationException {
+    public:
+        OutOfOrderFrames(std::string msg, int line);
+    };
+
 
     class MovieSubtitles {
     public:
-        int current_line;
-
         void
         ShiftAllSubtitlesBy(int miliseconds, int framerate, std::stringstream *in, std::stringstream *out) const;
 
@@ -60,7 +68,7 @@ namespace moviesubs {
         Delay(int miliseconds, int framerate, std::stringstream *in, std::stringstream *out, const int line_number) const override;
 
     private:
-        int ResidueAdd(int &number1, int number2, int limit) const;
+        long ResidueAdd(long &number1, long number2, int limit) const;
     };
 }
 
