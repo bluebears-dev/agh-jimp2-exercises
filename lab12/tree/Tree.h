@@ -11,7 +11,7 @@ namespace tree {
     template<class T>
     class Tree {
     public:
-        Tree() : value_(0) {};
+        Tree() : value_() {};
 
         Tree(const T &value) {
             value_ = value;
