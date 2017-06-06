@@ -13,11 +13,10 @@ namespace tree {
     public:
         Tree() : value_() {};
 
-        Tree(const T &value) {
-            value_ = value;
-        };
+        Tree(const T &value) : value_(value) {}
 
-        void Insert(const Tree &element);
+        void Insert(const T &element);
+        Tree *Root() { return this; }
 
         bool Find(const Tree &element);
 
@@ -35,21 +34,17 @@ namespace tree {
     };
 
     template<class T>
-    void Tree<T>::Insert(const Tree<T> &element) {
+    void Tree<T>::Insert(const T &element) {
         if (left_ != nullptr and right_ != nullptr) {
-            if (element.value_ > value_)
+            if (element > value_)
                 right_->Insert(element);
             else
                 left_->Insert(element);
         } else {
-            if (element.value_ > value_)
-                right_ = std::make_unique<Tree>(Tree{element.value_});
+            if (element > value_)
+                right_ = std::make_unique<Tree>(Tree{element});
             else
-                left_ = std::make_unique<Tree>(Tree{element.value_});
-            if (element.left_ != nullptr)
-                this->Insert(*element.left_);
-            if (element.right_ != nullptr)
-                this->Insert(*element.right_);
+                left_ = std::make_unique<Tree>(Tree{element});
         }
     }
 
